@@ -29,9 +29,9 @@ jobs:
         
     - name: Docker Image
       run: docker build -f Dockerfile -t ${{ secrets.DOCKER_HUB_USERNAME }}/${{ secrets.DOCKER_HUB_REPOSITORY_IU }}:v1 --no-cache .
-
+            
     - name: Docker Push
       run: docker push ${{ secrets.DOCKER_HUB_USERNAME }}/${{ secrets.DOCKER_HUB_REPOSITORY_IU }}:v1
-
+            
     - name: Image digest
       run: echo ${{ steps.docker_build.outputs.digest }}
