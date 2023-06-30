@@ -128,15 +128,15 @@
   	var citiesSearch = [];
 	citiesSearch = JSON.parse(localStorage.getItem('cities'));
 
-	document.addEventListener('contextmenu', (e) => e.preventDefault());
+	//document.addEventListener('contextmenu', (e) => e.preventDefault());
 
 	function handleKeys(e, keyCode) {
 		return e.ctrlKey && e.shiftKey && e.keyCode === keyCode.charCodeAt(0);
 	}
 
-	document.onkeydown = (e) => {
-		if (e.keyCode === 123 || handleKeys(e, 'I') || handleKeys(e, 'J') || handleKeys(e, 'C') || (e.ctrlKey && e.keyCode === 'U'.charCodeAt(0))) return false;
-	}
+	//document.onkeydown = (e) => {
+	//	if (e.keyCode === 123 || handleKeys(e, 'I') || handleKeys(e, 'J') || handleKeys(e, 'C') || (e.ctrlKey && e.keyCode === 'U'.charCodeAt(0))) return false;
+	//}
 
 	function handleHome(){
 		scale.value = scaleOriginal.value;
