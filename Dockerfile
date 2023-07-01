@@ -1,5 +1,4 @@
 FROM node:lts-alpine as build-stage
-MAINTAINER Wellington dos Santos Castor
 
 WORKDIR /app
 COPY package*.json ./
@@ -12,4 +11,5 @@ FROM nginx:stable-alpine as prod-stage
 COPY ./.nginx/nginx.conf /etc/nginx/nginx.conf
 COPY --from=build-stage /app/dist /usr/share/nginx/html
 EXPOSE 80
+EXPOSE 443
 CMD ["nginx", "-g", "daemon off;"]
