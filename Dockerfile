@@ -1,17 +1,14 @@
-FROM node:lts-alpine
+FROM node:lts-alpine as build-stage
 MAINTAINER Wellington dos Santos Castor
 
-RUN npm install -g http-server
 WORKDIR /app
 COPY package*.json ./
 RUN npm install
 COPY . .
 RUN npm run build
 
-FROM nginx:stable-alpine as production-stage
+
+FROM nginx:stable-alpine as prod-stage
 COPY --from=build-stage /app/dist /usr/share/nginx/html
-
 EXPOSE 80
-EXPOSE 443
-
 CMD ["nginx", "-g", "daemon off;"]
