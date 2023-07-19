@@ -186,7 +186,6 @@ export default {
 };
 </script>
 <style scoped>
-    form input, form textarea,form span { width:98%; margin: 10px 1%}
     form div {height:80px}
     form div div{ width:48%; margin: 1%;float:left;height:80px}
     button{float:right;margin:10px 1%}

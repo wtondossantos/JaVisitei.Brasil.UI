@@ -118,6 +118,5 @@
     };
 </script>
 <style scoped>
-    form input, form textarea { width:98%; margin: 10px 1%}
     button{float:right;margin:10px 1%}
 </style>
