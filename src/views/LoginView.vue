@@ -111,12 +111,13 @@
     margin: 15px 0 0 0;
     width: 100%;
     height: 40px;
-    line-height: 40px;
+    line-height: 40px;background: #f7f7f7;
+    border: 1px solid #333;
   }
   #login button{
     width: 100%;
     border-radius: 0;
-    background:#ff7;
+    background:#8dd521;
     border:1px solid #666;
     margin: 15px 0 0 0;
   }

@@ -185,7 +185,6 @@ export default {
 
 <style scoped>
     .alert{padding:10px 1%}
-    form input, form textarea,form span { width:98%; margin: 10px 1%}
     form div div {height:80px}
     form div div div{ width:48%; margin: 1%;float:left;height:80px}
     button{float:right;margin:10px 1%}
