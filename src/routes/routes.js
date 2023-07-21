@@ -11,6 +11,8 @@ import ManagerPassword from "@/views/ManagerPasswordView.vue";
 import CookiesPolicy from "@/views/CookiesPolicyView.vue";
 import TermsOfUse from "@/views/TermsOfUseView.vue";
 import PrivacyPolicy from "@/views/PrivacyPolicyView.vue";
+import UpdatePassword from "@/views/UpdatePasswordView.vue";
+
 
 // lazy-loaded
 //const BoardAdmin = () => import("./views/BoardAdmin.vue")
@@ -87,6 +89,10 @@ const routes = [
     path: "/managerPassword",
     component: ManagerPassword,
   },
+  {
+    path: "/updatePassword",
+    component: UpdatePassword,
+  },
 ];
 
 const router = createRouter({
@@ -95,7 +101,7 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  const publicPages = ['/login', '/register', '/home', '/history', '/contact', '/activeAccount', '/managerPassword', '/cookiesPolicy', '/termsOfUse', '/privacyPolicy'];
+  const publicPages = ['/login', '/register', '/home', '/history', '/contact', '/activeAccount', '/managerPassword', '/cookiesPolicy', '/termsOfUse', '/privacyPolicy', '/updatePassword'];
   const authRequired = !publicPages.includes(to.path);
   const loggedIn = localStorage.getItem('user');
   const token = localStorage.getItem('token');
