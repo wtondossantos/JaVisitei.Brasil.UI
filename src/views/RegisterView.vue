@@ -191,7 +191,7 @@ export default {
 <style scoped>
     .alert{padding:10px 1%}
     form div div {height:80px}
-    form div div div{ width:48%; margin: 1%;float:left;height:80px}
+    form div div div{ width:49%; margin: 1% 0.5%;float:left;height:80px}
     button{float:right;margin:10px 1%}
     p{margin:10px 0 0;display: inline-block;}
     .checkout input{float: left;width: 16px;margin: 5px 1%;}
