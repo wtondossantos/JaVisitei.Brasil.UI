@@ -344,7 +344,7 @@
 		if(citiesSearch != null){
 			autocomplete(search, citiesSearch);
 		}else{
-			await http.get('municipalities/search')
+			await http.get('municipalities/search/bra_brasil')
 				.then(function (response) {
 					citiesSearch = response.data.$values;
           			Promise.resolve(response.data);
