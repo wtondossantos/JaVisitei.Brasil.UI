@@ -10,8 +10,9 @@ import {
   faEnvelope,
   faNewspaper,
   faKey,
+  faBars,
 } from "@fortawesome/free-solid-svg-icons";
 
-library.add(faHome, faUser, faUserPlus, faSignInAlt, faSignOutAlt, faMapLocationDot, faEnvelope, faNewspaper, faKey);
+library.add(faHome, faUser, faUserPlus, faSignInAlt, faSignOutAlt, faMapLocationDot, faEnvelope, faNewspaper, faKey, faBars);
 
 export { FontAwesomeIcon };
