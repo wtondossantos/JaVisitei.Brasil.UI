@@ -47,10 +47,10 @@
                         <ErrorMessage name="repassword" class="error-feedback" />
                     </div>
                 </div>
-                <div class="checkout">
+                <!-- <div class="checkout">
                     <Field name="newsletter" type="checkbox" value="newsletter"/>
                     <label for="newsletter" style="display:block">Aceito receber novidades por e-mail</label>
-                </div>
+                </div> -->
                 <button>
                     <font-awesome-icon icon="sign-in-alt" /> Cadastre-se
                 </button>

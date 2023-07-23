@@ -766,10 +766,8 @@
 			float:right;
 		}
 		
-		#javisitei input{
-			float:right;
-		}
-		
+		#javisitei input[type="button"]{background:#f1f1f1}
+		#javisitei input[type="button"]:hover{background:#f3f3f3}
 		#javisitei textarea{
 			width: 239px;
 			margin: 10px 0 0 10px;
@@ -791,9 +789,14 @@
 			width:90px;
 		}
 		
+		#javisitei input,#javisitei textarea{
+			background:#fff;
+			border:1px #333 solid;
+		}
 		#javisitei #date{
 			width: 122px;
 			padding: 5px 4px;
+			font-size: 100%;
 		}
 		
 		#javisitei #date, 

@@ -26,16 +26,33 @@
         </router-link>
       </h1>
 			<nav class="menu">
-				<ul>
-          <li v-if="currentUser">
-            <a @click.prevent="logOut">
-              <font-awesome-icon icon="sign-out-alt" /> LogOut
-            </a>
-          </li>
-          <li v-if="currentUser">
-            <router-link to="/profile">
-              <font-awesome-icon icon="user" />
-              {{ currentUser.username }}
+        <button class="menu-mobile" id="menuMobile" @click="onClickMenuMobile">
+          <font-awesome-icon icon="bars" />
+        </button>
+				<ul ref="menu" id="menu" @click="onClickMenuMobile">
+					<li id="menuHome">
+            <router-link to="/home">
+              <font-awesome-icon icon="home" /> Home
+            </router-link>
+					</li>
+					<li id="menuSobre">
+            <router-link to="/history">
+              Sobre
+            </router-link>
+					</li>
+					<li id="menuContato">
+            <router-link to="/contact">
+              Contato
+            </router-link>
+					</li>
+					<li id="menuBrasil" v-if="currentUser">
+            <router-link :to="{name:'brasil'}">
+              <font-awesome-icon icon="map-location-dot" /> Brasil
+            </router-link>
+					</li>
+          <li v-if="!currentUser">
+            <router-link to="/register">
+              <font-awesome-icon icon="user-plus" /> Criar conta
             </router-link>
           </li>
           <li v-if="!currentUser">
@@ -43,37 +60,23 @@
               <font-awesome-icon icon="sign-in-alt" /> Login
             </router-link>
           </li>
-          <li v-if="!currentUser">
-            <router-link to="/register">
-              <font-awesome-icon icon="user-plus" /> Criar conta
+          <li v-if="currentUser">
+            <router-link to="/profile">
+              <font-awesome-icon icon="user" />
+              {{ currentUser.username }}
             </router-link>
           </li>
-					<li id="menuContato">
-            <router-link to="/contact">
-              Contato
-            </router-link>
-					</li>
+          <li v-if="currentUser">
+            <a @click.prevent="logOut">
+              <font-awesome-icon icon="sign-out-alt" /> LogOut
+            </a>
+          </li>
 					<!-- <li id="menuMundo" v-if="currentUser">
 						<a href="e" title="">Mundo</a>
 					</li> -->
-					<li id="menuBrasil" v-if="currentUser">
-            <router-link :to="{name:'brasil'}">
-              <font-awesome-icon icon="map-location-dot" /> Brasil
-            </router-link>
-					</li>
 					<!-- <li id="menuComprar">
 						<a href="v" title="">Comprar</a>
 					</li> -->
-					<li id="menuSobre">
-            <router-link to="/history">
-              Sobre
-            </router-link>
-					</li>
-					<li id="menuHome">
-            <router-link to="/home">
-              <font-awesome-icon icon="home" /> Home
-            </router-link>
-					</li>
         </ul>
       </nav>
       <div class="search">
@@ -86,7 +89,16 @@
 </template>
 
 <script>
+  import { ref } from "vue";
+
+	const menu = ref(null);
+
   export default {
+		setup(){
+			return {
+				menu
+      }
+    },
     computed: {
       currentUser() {
         return this.$store.state.auth.user;
@@ -111,10 +123,26 @@
     },
     methods: {
       logOut() {
+        menu.value.style = 'display:none!important';
         this.$store.dispatch('auth/logout');
         this.$router.push('/login');
-      }
-    }
+      },
+			onClickMenuMobile(){
+        if(innerWidth < 531)
+        {
+          this.menuActive = !this.menuActive;
+          if(this.menuActive)
+            menu.value.style = 'display:block!important';
+          else
+            menu.value.style = 'display:none!important';
+        }
+			}
+    },
+		data(){
+			return{
+				menuActive: false
+			}
+		}
   };
 </script>
 
@@ -122,4 +150,5 @@
   .container{
     margin-top:50px
   }
+  #menuMobile{display:none}
 </style>
