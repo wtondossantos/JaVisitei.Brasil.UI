@@ -22,6 +22,7 @@ class AuthService {
                             name: resp.data.name,
                             surname: resp.data.surname,
                             username: resp.data.username, 
+                            newsletter: resp.data.newsletter, 
                             token: response.data.data.token
                         };
 

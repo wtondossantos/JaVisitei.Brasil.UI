@@ -36,7 +36,22 @@
                     <ErrorMessage name="reEmail" class="error-feedback" />
                 </div>
             </div>
+            <div class="checkout" style="display:none">
+                <Field name="newsletter" id="newsletter" type="checkbox" @click="clickNewsletter" :value="currentUser.newsletter" />
+                <label for="newsletter" style="display:block">Aceito receber novidades por e-mail</label>
+            </div>
             <div class="group">
+                <div class="checkout">
+                    <Field name="updatePass" type="checkbox" value="true" @click="clickUpdatePass"/>
+                    <label for="updatePass" style="display:block">Atualizar senha</label>
+                </div>
+                <div v-if="updatePass">
+                    <label for="oldPassword" style="display:none">Senha antiga</label>
+                    <Field name="oldPassword" type="password" placeholder="Senha antiga" maxlength="20"/>
+                    <ErrorMessage name="oldPassword" class="error-feedback" />
+                </div>
+            </div>
+            <div class="group" v-if="updatePass">
                 <div>
                     <label for="password" style="display:none">Nova senha</label>
                     <Field name="password" type="password" placeholder="Nova senha"/>
@@ -46,13 +61,6 @@
                     <label for="rePassword" style="display:none">Confirmar nova senha</label>
                     <Field name="rePassword" type="password" placeholder="Confirmar nova senha"/>
                     <ErrorMessage name="rePassword" class="error-feedback" />
-                </div>
-            </div>
-            <div class="group">
-                <div>
-                    <label for="oldPassword" style="display:none">Senha antiga</label>
-                    <Field name="oldPassword" type="password" placeholder="Senha antiga" maxlength="20"/>
-                    <ErrorMessage name="oldPassword" class="error-feedback" />
                 </div>
             </div>
             <button>
@@ -76,7 +84,8 @@ export default {
     },
   computed: {
     currentUser() {
-      return this.$store.state.auth.user;
+        this.newsletter = this.$store.state.auth.user.newsletter;
+        return this.$store.state.auth.user;
     }
   },
     data() {
@@ -114,12 +123,14 @@ export default {
                 .string()
                 .max(20, "Máximo 20 caracteres."),
                 });
-        
+
         return {
             message: '',
             schema,
             content: "Perfil",
             alertSuccess: false,
+            updatePass: false,
+            newsletter: false,
         };
     },
     mounted() {
@@ -130,6 +141,9 @@ export default {
     methods: {
         handleProfile(data) {
             this.message = '';
+
+            //data.newsletter = this.newsletter;
+
             http.put('users', data)
                 .then((response) => {
                     this.message = response.data.message;
@@ -142,6 +156,7 @@ export default {
                         name: response.data.data.name,
                         surname: response.data.data.surname,
                         username: response.data.data.username, 
+                        newsletter: response.data.data.newsletter, 
                         token: JSON.parse(localStorage.getItem("token"))
                     };
 
@@ -181,6 +196,12 @@ export default {
                         this.alertSuccess = false;
                     }
 				});
+        },
+        clickUpdatePass(){
+            this.updatePass = !this.updatePass;
+        },
+        clickNewsletter(){
+            this.newsletter = !this.newsletter;
         }
     }
 };
@@ -189,4 +210,6 @@ export default {
     form div {height:80px}
     form div div{ width:48%; margin: 1%;float:left;height:80px}
     button{float:right;margin:10px 1%}
+    .checkout input{float: left;width: 16px;margin: 5px 1%;}
+    .checkout label{float: left;}
 </style>
