@@ -36,7 +36,7 @@
                     <ErrorMessage name="reEmail" class="error-feedback" />
                 </div>
             </div>
-            <div class="checkout" style="display:none">
+            <div class="checkout">
                 <Field name="newsletter" id="newsletter" type="checkbox" @click="clickNewsletter" :value="currentUser.newsletter" />
                 <label for="newsletter" style="display:block">Aceito receber novidades por e-mail</label>
             </div>
@@ -84,7 +84,6 @@ export default {
     },
   computed: {
     currentUser() {
-        this.newsletter = this.$store.state.auth.user.newsletter;
         return this.$store.state.auth.user;
     }
   },
@@ -136,13 +135,15 @@ export default {
     mounted() {
         if (!this.currentUser) {
             this.$router.push('/login');
+        }else{
+            newsletter.checked = this.currentUser.newsletter;
         }
     },
     methods: {
         handleProfile(data) {
             this.message = '';
 
-            //data.newsletter = this.newsletter;
+            data.newsletter = newsletter.checked;
 
             http.put('users', data)
                 .then((response) => {
@@ -201,7 +202,7 @@ export default {
             this.updatePass = !this.updatePass;
         },
         clickNewsletter(){
-            this.newsletter = !this.newsletter;
+            this.newsletter = !newsletter.checked;
         }
     }
 };
