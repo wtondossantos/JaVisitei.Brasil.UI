@@ -123,7 +123,6 @@
     },
     methods: {
       logOut() {
-        menu.value.style = 'display:none!important';
         this.$store.dispatch('auth/logout');
         this.$router.push('/login');
       },

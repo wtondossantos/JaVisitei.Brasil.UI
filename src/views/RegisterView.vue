@@ -47,10 +47,10 @@
                         <ErrorMessage name="repassword" class="error-feedback" />
                     </div>
                 </div>
-                <!-- <div class="checkout">
-                    <Field name="newsletter" type="checkbox" value="newsletter"/>
+                <div class="checkout">
+                    <Field name="newsletter" type="checkbox" value="1"/>
                     <label for="newsletter" style="display:block">Aceito receber novidades por e-mail</label>
-                </div> -->
+                </div>
                 <button>
                     <font-awesome-icon icon="sign-in-alt" /> Cadastre-se
                 </button>
@@ -148,6 +148,8 @@ export default {
                             this.message = 'A confirmação da senha é diferente da senha.';
                             return;
                         }
+
+                        user.newsletter = user.newsletter == "1" ? true : false;
 
                         this.$store.dispatch("auth/register", user).then(
                             () => {
