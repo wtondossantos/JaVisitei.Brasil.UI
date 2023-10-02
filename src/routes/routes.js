@@ -6,6 +6,7 @@ import History from "@/views/HistoryView.vue";
 import Contact from "@/views/ContactView.vue";
 import Profile from "@/views/ProfileView.vue";
 import Brasil from "@/views/BrazilView.vue";
+import Earth from "@/views/EarthView.vue";
 import ActiveAccount from "@/views/ActiveAccountView.vue";
 import ManagerPassword from "@/views/ManagerPasswordView.vue";
 import CookiesPolicy from "@/views/CookiesPolicyView.vue";
@@ -84,6 +85,12 @@ const routes = [
     name: "brasil",
     // lazy-loaded
     component: Brasil,
+  },
+  {
+    path: "/earth",
+    name: "earth",
+    // lazy-loaded
+    component: Earth,
   },
   {
     path: "/managerPassword",

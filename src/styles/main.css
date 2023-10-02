@@ -51,7 +51,7 @@
 }
 
 #header nav ul li {
-    display: block;padding: 10px;text-decoration: none;
+    display: block;padding: 10px 8px;text-decoration: none;
     color: #333;text-transform: uppercase;font-size: 80%;
     float: left;
 }

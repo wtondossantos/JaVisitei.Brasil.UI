@@ -10,8 +10,8 @@
 			<div id="tooltip" ref="tooltip" style="top: 0; left: 0; display: none"></div>
 			<div id="javisitei" ref="javisitei" style="display:none">
 				<button id="closeJavisitei" @click="onClickCloseJavisitei">X</button>
-				<h3 id="cityName" ref="cityName" style="color:#000"></h3>
-				<h2 id="stateName" ref="stateName" style="color:#000"></h2>
+				<h3 id="regionName" ref="regionName" style="color:#000"></h3>
+				<h2 id="countryName" ref="countryName" style="color:#000"></h2>
 				
 				<fieldset class="block-1">
 					<label for="annotation">Nota: </label>
@@ -28,37 +28,20 @@
 				<input type="button" id="remover" value="Remover" @click.prevent="onClickPinRemove" alt="Botão para remover visita." />
 			</div>
 			<div id="main" @wheel="onWheelMain" @mousedown="onMouseDownMain" @mouseup="onMouseUpMain" @mousemove="onMouseMoveMain">
-				<svg id="map" :width="innerWidth" :height="innerHeightNew" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+				<svg id="map" :width="innerWidth" :height="innerHeightNew" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" transform-origin="center">
 					<g class="map-g" id="mapg" :style="styleTransform">
-						<desc>Brasil</desc>
-						<g v-for="state in brazil?.states?.$values" v-bind:key="state.$id" :id="state.id + '_g'">
-							<g v-for="macro in state.macroregions.$values" v-bind:key="macro.$id" :id="macro.id + '_g'">
-								<g v-for="micro in macro.microregions.$values" v-bind:key="micro.$id" :id="micro.id + '_g'">
-									<a v-for="city in micro.municipalities.$values" v-bind:key="city.$id" :id="city.id + '_a'" class="city" @click.prevent="onClickCity" @mouseover="onMouseOverCity" @mouseout="onMouseOutCity" :title="state.name+'|'+city.name">
-										<path aria-hidden="true" :id="city.id" :ref="city.id" :itemid="city.$id" :title="city.name" :style="[city.visit?.color ? [{fill: city.visit.color}] : '']" stroke-width="0.5" class="shape" :d="city.canvas"></path>
-										<div style="display:none" v-if="city.visit?.color">
-											<span class="color">{{city.visit.color}}</span>
-											<span class="date">{{city.visit.visitDate.substring(0,10)}}</span>
-											<span class="note">{{city.visit.note}}</span>
-										</div>
-									</a>
-									<path :id="micro.id" stroke-width="0.75" :d="micro.canvas"></path>
-								</g>
-								<g v-for="archipelago in macro.archipelagos.$values" v-bind:key="archipelago.$id" :id="archipelago.id + '_g'">
-									<a v-for="island in archipelago.islands.$values" v-bind:key="island.$id" :id="island.id + '_a'" class="city" @click.prevent="onClickCity" @mouseover="onMouseOverCity" @mouseout="onMouseOutCity" :title="state.name+'|'+island.name">
-										<path aria-hidden="true" :id="island.id" :ref="island.id" :itemid="island.$id" :title="island.name" :style="[island.visit?.color ? [{fill: island.visit.color}] : '']" stroke-width="0.5" class="shape" :d="island.canvas"></path>
-										<div style="display:none" v-if="island.visit?.color">
-											<span class="color">{{island.visit.color}}</span>
-											<span class="date">{{island.visit.visitDate.substring(0,10)}}</span>
-											<span class="note">{{island.visit.note}}</span>
-										</div>
-									</a>
-									<path :id="archipelago.id" stroke-width="0.75" :d="archipelago.canvas"></path>
-								</g>
-								<path :id="macro.id" stroke-width="1" :d="macro.canvas"></path>
-							</g>
-							<path :id="state.id" stroke-width="2" :d="state.canvas"></path>
-						</g>
+						<desc>Terra</desc>
+						<g v-for="country in earthFull?.$values" v-bind:key="country.$id" :id="country.id + '_g'">
+							<a v-for="state in country?.states?.$values" v-bind:key="state.$id" :id="state.id + '_a'" class="state" @click.prevent="onClickState" @mouseover="onMouseOverState" @mouseout="onMouseOutState" :title="state.name+'|'+country.name.split('|')[1]">
+                                <path aria-hidden="true" :id="state.id" :ref="state.id" :itemid="state.$id" :title="state.name +' - '+ country.name.split('|')[1]" :style="[state.visit?.color ? [{fill: state.visit.color}] : '']" stroke-width="0.2" class="shape" :d="state.canvas"></path>
+                                <div style="display:none" v-if="state.visit?.color">
+                                    <span class="color">{{state.visit.color}}</span>
+                                    <span class="date">{{state.visit.visitDate.substring(0,10)}}</span>
+                                    <span class="note">{{state.visit.note}}</span>
+                                </div>
+                            </a>
+                            <path :id="country.id" stroke-width="0.5" :d="country.canvas"></path>
+                        </g>
 					</g>
 					<g transform="translate(10,10)" class="map-navigation">
 						<g transform="translate(0,47)">
@@ -81,6 +64,10 @@
 								<circle r="15.5" cx="0" cy="0" fill="#FFFFFF" stroke="#000000" fill-opacity="1" stroke-width="1" stroke-opacity="0.1" transform="translate(16,16)" id="zoomout" @click="onClickZoomOut"></circle>
 								<path cs="100,100" d="M-6.5,0.5 L7.5,0.5" fill="none" stroke-width="1" stroke-opacity="1" stroke="#000000" transform="translate(16,16)" opacity="1" style="pointer-events: none;"></path>
 							</g>
+							<!-- <g cursor="pointer" transform="translate(0,36)">
+								<circle fill="#FFFFFF" stroke="#000000"  r="15.5" cx="0" cy="36" fill-opacity="1" stroke-width="1" stroke-opacity="0.1" transform="translate(16,16)" id="invert" @click="onClickInvert" />
+								<path d="M-2.979,33.75h9.354 M-6.042,38.625h9.354" fill="none" stroke-width="1" stroke-opacity="1" stroke="#000000" transform="translate(16,16)" opacity="1" style="pointer-events: none;"/>
+							</g> -->
 						</g>
 						<g cursor="pointer">
 							<circle r="15.5" cx="0" cy="0" fill="#FFFFFF" stroke="#000000" fill-opacity="1" stroke-width="1" stroke-opacity="0.1" transform="translate(16,16)" @click="onClickHome"></circle>
@@ -96,8 +83,8 @@
     import { ref, reactive} from "vue";
 	import http from '@/services/http.js';
 
-    const fileWidth = 4612,
-        fileHeight = 4588,
+    const fileWidth = 6266,
+        fileHeight = 3771,
         maxScale = 1.50,
         ratio = 1.2,
         maxRatio = 1.8,
@@ -114,8 +101,8 @@
 		javisitei = ref(null),
 		color = ref(null),
 		hexcolor = ref(null),
-		cityName = ref(null),
-		stateName = ref(null),
+		regionName = ref(null),
+		countryName = ref(null),
 		annotation = ref(null),
 		date = ref(null),
 		scale = ref(0.21),
@@ -125,8 +112,11 @@
 		start = reactive({x: 0, y: 0});
 		var user = reactive(localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : {});
 	
-  	var citiesSearch = [];
-	citiesSearch = JSON.parse(localStorage.getItem('cities'));
+  	var namesStates = [];
+	namesStates = JSON.parse(localStorage.getItem('namesStates'));
+
+  	var namesCountries = [];
+	namesCountries = JSON.parse(localStorage.getItem('namesCountries'));
 
 	document.addEventListener('contextmenu', (e) => e.preventDefault());
 
@@ -164,7 +154,7 @@
 		setTransform(maxTransition);	
 	}
 	
-	function handleJaVisitei(active, cityDetail, eCity, nameState, posX, posY) {
+	function handleJaVisitei(active, regionDetail, eCity, nameState, posX, posY) {
 			
 		if(active){
 			addPathActive(eCity);
@@ -172,12 +162,12 @@
 			if((posX + javisiteiWidth) > innerWidth) posX = innerWidth - javisiteiWidth;
 			if((posY + javisiteiHeight) > innerHeightNew) posY = innerHeightNew - javisiteiHeight;
 
-			if(cityDetail.length > 0) {
+			if(regionDetail.length > 0) {
 				salvar.value = 'Atualizar';
 				remover.style = 'display: block';
-				setColor(cityDetail[0].getElementsByClassName('color')[0].innerHTML);	
-				date.value.value = cityDetail[0].getElementsByClassName('date')[0].innerHTML;
-				annotation.value.value = cityDetail[0].getElementsByClassName('note')[0].innerHTML;
+				setColor(regionDetail[0].getElementsByClassName('color')[0].innerHTML);	
+				date.value.value = regionDetail[0].getElementsByClassName('date')[0].innerHTML;
+				annotation.value.value = regionDetail[0].getElementsByClassName('note')[0].innerHTML;
 			}else{
 				salvar.value = 'Pinar';
 				remover.style = 'display: none';
@@ -186,8 +176,8 @@
 			}
 			
 			javisitei.value.style = `display: block; left: ${posX}px; top: ${posY}px;border-color: ${color.value.value}`;
-			cityName.value.innerText = eCity.attributes.title.value;
-			stateName.value.innerText = nameState;
+			regionName.value.innerText = eCity.attributes.title.value;
+			countryName.value.innerText = nameState;
 			search.value = '';
 			
 		} else cleanJaVisitei();
@@ -195,15 +185,15 @@
 	
 	function themeJaVisitei(hex){
 		javisitei.value.attributes.style.borderColor = hex;
-		cityName.value.style = `color: ${hex}`;
-		stateName.value.style = `color: ${hex}`;
+		regionName.value.style = `color: ${hex}`;
+		countryName.value.style = `color: ${hex}`;
 	}
 	
 	function cleanJaVisitei(){
 		removePathActive();
 		javisitei.value.style = 'display: none';
-		cityName.value.innerText = '';
-		stateName.value.innerText = '';
+		regionName.value.innerText = '';
+		countryName.value.innerText = '';
 		date.value.value = '';
 		color.value.value = '#FFFFFF'
 		hexcolor.value.value = '';
@@ -262,8 +252,10 @@
 			this.parentNode.appendChild(a);
 			
 			for (i = 0; i < arr.length; i++) {
+
 				if (replaceSpecialChars(arr[i].name.substr(0, val.length)) == replaceSpecialChars(val)) {
-					let nameFull = `${arr[i].name} - ${arr[i].id.substr(0,2).toUpperCase()}`;
+					let nameFull = `${arr[i].name} - ${arr[i].name_country.split('|')[1]}`;
+
 					b = document.createElement("DIV");
 					b.innerHTML = nameFull;
 					b.innerHTML += "<input type='hidden' value='" + nameFull + "' key='"+arr[i].id+"'>";
@@ -323,61 +315,80 @@
 	{
 		str = str.replace(/[ÀÁÂÃÄÅ]/,"A");
 		str = str.replace(/[àáâãäå]/,"a");
-		str = str.replace(/[èéê]/,"e");
 		str = str.replace(/[ÈÉÊË]/,"E");
-		str = str.replace(/[èéê]/,"e");
-		str = str.replace(/[ÒÓÔÕ]/,"O");
-		str = str.replace(/[òóôõ]/,"o");
-		str = str.replace(/[ÌÍ]/,"I");
-		str = str.replace(/[ìí]/,"i");
+		str = str.replace(/[èéêë]/,"e");
+		str = str.replace(/[ÒÓÔÕÖ]/,"O");
+		str = str.replace(/[òóôõö]/,"o");
+		str = str.replace(/[ÌÍÏ]/,"I");
+		str = str.replace(/[ìíï]/,"i");
 		str = str.replace(/[ÙÚ]/,"U");
 		str = str.replace(/[ùú]/,"u");
 		str = str.replace(/[Ç]/,"C");
-		str = str.replace(/[ç]/,"c");
+		str = str.replace(/[çč]/,"c");
 		str = str.replace(/[^a-z0-9]/gi,'');
 		
 		return str.toUpperCase(); 
 	}
 	
-	async function getMunicipalitiesAPI(){
+	async function getNamesStatesAPI(){
 		
-		if(citiesSearch != null){
-			autocomplete(search, citiesSearch);
+		if(namesStates != null){
+			autocomplete(search, namesStates);
 		}else{
-			await http.get('municipalities/search/bra_brasil')
+			await http.get('states/1/names')
 				.then(function (response) {
-					citiesSearch = response.data.$values;
+					namesStates = response.data.$values;
           			Promise.resolve(response.data);
 				})
 				.catch((error) => {
   					if (error.response || error.response.status != 401) console.log(error);
 				})
 				.finally(function () {
-					localStorage.setItem('cities', JSON.stringify(citiesSearch));
-					autocomplete(search, citiesSearch);
+					localStorage.setItem('namesStates', JSON.stringify(namesStates));
+					autocomplete(search, namesStates);
 				});
 		}
   	}
 
+	async function getNamesCountriesAPI(){
+		
+		if(namesCountries != null){
+			autocomplete(search, namesCountries);
+		}else{
+			await http.get('countries/1/names/mundifull')
+				.then(function (response) {
+					namesCountries = response.data.$values;
+          			Promise.resolve(response.data);
+				})
+				.catch((error) => {
+  					if (error.response || error.response.status != 401) console.log(error);
+				})
+				.finally(function () {
+					localStorage.setItem('namesCountries', JSON.stringify(namesCountries));
+					autocomplete(search, namesCountries);
+				});
+		}
+  	}
+    
 	async function pinarAPI(){
 		
 		let data = {
   				userId: user.id,
-  				regionTypeId: pathActive.value.id.substring(pathActive.value.id.length-6, pathActive.value.id.length) == 'island' ? 7 : 6,
+  				regionTypeId: 2,
   				regionId: pathActive.value.id,
   				color: convertHexToRGB(color.value.value),
   				visitationDate: date.value.value,
 				note: annotation.value.value
 			};
 
-		let cityDetail = pathActive.value.parentElement.getElementsByTagName('div');
-		if(cityDetail.length > 0) {
+		let regionDetail = pathActive.value.parentElement.getElementsByTagName('div');
+		if(regionDetail.length > 0) {
 			await http.put('visits', data)
 				.then((response) => {
 					if(response.data){
-						cityDetail[0].getElementsByClassName('color')[0].innerHTML = response.data.data.color;
-						cityDetail[0].getElementsByClassName('date')[0].innerHTML = response.data.data.visitDate.substring(0,10);
-						cityDetail[0].getElementsByClassName('note')[0].innerHTML = response.data.data.note;
+						regionDetail[0].getElementsByClassName('color')[0].innerHTML = response.data.data.color;
+						regionDetail[0].getElementsByClassName('date')[0].innerHTML = response.data.data.visitDate.substring(0,10);
+						regionDetail[0].getElementsByClassName('note')[0].innerHTML = response.data.data.note;
 					}
           			Promise.resolve(response.data);
 					
@@ -418,11 +429,11 @@
 			});
 	}
 	
-	function getMapAPI(map){
-		map.brazil = null;
-		http.get(`countries/bra_brasil/user/${user.id}/full`)
+	function getMapEarthFullAPI(map){
+		map.earthFull = null;
+		http.get(`countries/1/user/${user.id}/mundifull`)
 			.then(response => {
-				map.brazil = response.data;
+				map.earthFull = response.data;
 				Promise.resolve(response.data);
 			})
 			.catch(error => {
@@ -449,8 +460,8 @@
 				javisitei,
 				hexcolor,
 				color,
-				cityName,
-				stateName,
+				regionName,
+				countryName,
 				date,
 				annotation
 			}
@@ -462,7 +473,7 @@
 			loggedIn() {
 				return this.$store.state.auth.status.loggedIn;
 			},
-			currentMapBrazil(){
+			currentMapEarth(){
 				return true;
 			}
 		},
@@ -479,14 +490,14 @@
 			scale.value = innerHeightNew < innerWidth ? innerHeightNew/fileHeight : innerWidth/fileWidth;
 			scaleOriginal.value = scale.value;
 
-			getMunicipalitiesAPI();
+			getNamesStatesAPI();
 			if(this.$store.state.auth.user)
 				user = this.$store.state.auth.user;
-			getMapAPI(this);
+			getMapEarthFullAPI(this);
 			handleHome();
 		},
 		methods: {
-			onMouseOverCity($evt){
+			onMouseOverState($evt){
 				tooltip.value.innerText = $evt.target.attributes.title.value;
 				tooltip.value.style = 'display:block';
 
@@ -499,10 +510,10 @@
 				}
 				tooltip.value.style = style;
 			},
-			onMouseOutCity(){
+			onMouseOutState(){
 				tooltip.value.style = 'display:none';
 			},
-			onClickCity($evt){
+			onClickState($evt){
 				if(isClick.value){
 					removePathActive();
 					handleJaVisitei(true, $evt.target.parentElement.getElementsByTagName('div'), $evt.target, $evt.target.parentElement.attributes.title.value.split('|')[0], $evt.clientX, $evt.clientY);
@@ -606,21 +617,21 @@
 				javisitei,
 				hexcolor,
 				color,
-				cityName,
-				stateName,
+				regionName,
+				countryName,
 				date,
 				annotation,
-				brazil: null,
+				earthFull: null,
       			loading: true,
 				errored: false
 			}
 		}
 	}
-		
 </script>
-
 <style lang="scss" scoped>
-		
+
+		#main {background-color:#dceef3}
+
 		path{
 			fill: none;
 			stroke:#000000;
@@ -633,26 +644,17 @@
 			position:relative;
 		}
 		
-		#map .macro {
-			stroke-width:0.2;
-			stroke:#666;
-		}
-		
-		#map .micro {
-			stroke-width:0.15;
-		}
-		
-		#map .city {
+		#map .state {
 			cursor: pointer;
 			stroke-width:0.1;
 			position:relative;
 		}
 		
-		#map .city .shape {
+		#map .state .shape {
 			cursor: pointer;
 		}
 		
-		#map .city .lbl_city {
+		#map .state .lbl_state {
 			display: none;
 			font-family: Arial;
 			font-size: 14px;
@@ -661,26 +663,26 @@
 			position: absolute;
 		}
 		
-		#map .city:hover .lbl_city {
+		#map .state:hover .lbl_state {
 			display: block;
 			cursor: pointer;
 		}
 		
-		#map .map-g .city .shape {
+		#map .map-g .state .shape {
 			fill: #fff;
 		}
 		
-		#map .map-g .city .lbl_city {
+		#map .map-g .state .lbl_state {
 			fill: #666;
 			display: none;
 		}
 		
-		#map .map-g .city:hover .shape, #map .map-g .city.hover .shape {
+		#map .map-g .state:hover .shape, #map .map-g .state.hover .shape {
 			fill: rgba(0, 127, 255, 0.8) !important;
-			stroke-width: .75;
+			stroke-width: .2;
 		}
 		
-		#map .map-g .city .active{
+		#map .map-g .state .active{
 			fill: #2dffb2;
 		}
 
