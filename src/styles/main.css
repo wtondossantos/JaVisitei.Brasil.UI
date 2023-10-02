@@ -1,0 +1,142 @@
+@import './base.css';
+@import './media.css';
+
+ #app {
+  width: 100%;
+  margin: 0 auto;
+  font-weight: normal;
+} 
+
+#header nav {
+    float:right;list-style: none;padding: 0;
+    margin: 5px 1% 0 0;display: block;font-size:1em;
+}
+
+#header input{
+    padding: 5px 1%;
+    margin: 8px 0 0 1%;
+    float: left;
+    background: #fff;
+    border: #333 solid 1px;
+}
+
+#logo {
+  float: left;
+  width:5%;
+  height:43px;
+  font-size: 20px;
+  text-align: center;
+  margin:3px 0 3px 1%;
+  min-width: 60px;
+}
+
+#logo svg {
+  width:44px;
+}
+
+#header{
+  position: fixed;
+  right: 0;
+  top: 0;
+  width: 100%;
+  z-index: 9999;
+  min-width: 400px;
+  background: #eee;
+  border-bottom: 1px #333 solid;
+}
+
+#header nav ul{
+  padding: 0;
+  float:right;
+}
+
+#header nav ul li {
+    display: block;padding: 10px 8px;text-decoration: none;
+    color: #333;text-transform: uppercase;font-size: 80%;
+    float: left;
+}
+
+#header nav ul li:first {
+  padding-left: 0;
+}
+
+#header nav ul li:hover{
+    color: #FF9800;
+    cursor:pointer;
+}
+
+#header .autocomplete-items {
+    position: absolute;
+    border: 1px solid #666;
+    z-index: 99;
+    top: 42px;
+    left: 7%;
+    width: 35%;
+    margin: 0;
+    color: #666;
+    font-size: 14px;
+    text-align: left;
+}
+
+#header .autocomplete-items div {
+    padding: 0 10px;
+    cursor: pointer;
+    background-color: #fff; 
+    border-bottom: 1px solid #d4d4d4; 
+}
+
+#header .autocomplete-items div:hover {
+    background-color: #1e81d5; 
+    color:#fff;
+}
+
+#header .autocomplete-active {
+    background-color: DodgerBlue !important; 
+    color: #ffffff; 
+}
+
+#aviso{
+  width: 60%;
+  margin: 0 auto;
+  padding: 5%;
+  color: #f50;
+  font-size: 1.5em;
+  text-align: center;
+}
+
+#content{
+  width: 60%;
+  margin: 0 auto;
+  padding: 5%;
+  max-width: 1000px;
+}
+
+.error-feedback { 
+  color:#c00 
+}
+
+.alert-danger{
+  color:#c00
+}
+
+.alert-success{
+  color:#098709
+}
+
+.grecaptcha-badge{display:none!important}
+
+.left{float:left}
+.right{float:right}
+
+form input, form textarea,form span { width:98%; margin: 0 1% 10px;float:left}
+
+form input, form textarea {background: #f7f7f7;border: 1px solid #333;}
+
+form input, form span { height: 32px;line-height: 32px;}
+    
+form textarea{ min-height: 100px;}
+
+form input[type="checkbox"]{height: 14px;line-height: 14px;}
+input[type="button"]{cursor: pointer;}
+#header .menu-mobile{    display: none;}
+ 

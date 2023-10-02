@@ -1,0 +1,90 @@
+
+@media (min-width: 1025px) {
+    body {
+      display: flex;
+      place-items: center;
+    }
+    #header nav {
+        width: 65%;
+    }
+    #header input{
+        width:25%
+    }
+}
+
+@media only screen and (max-width: 1024px) and (min-width: 531px)  {
+    body {
+        display: flex;
+        place-items: center;
+    }
+    #header nav {
+        width: 74%;
+    }
+    #header input{
+        width:15%
+    }
+    #header #logo-login {
+        width:5%;
+        margin:3px 0 3px 1%;
+    }
+}
+@media only screen and (max-width: 530px) and (min-width: 0)  {
+    body {
+        display: flex;
+        place-items: center;
+    }
+    #header nav {
+        width: 15%;
+    }
+    #header .menu ul{
+        display: none!important;
+        position: absolute;
+        background: #fff;
+        top: 36px;
+        border: 1px #a39e9e solid;
+        min-width: 150px;
+        width: auto;
+        right: 2px;
+    }
+    #header .menu ul li{
+        width:100%;
+        font-size: 1em;
+        border-bottom:1px #bdb5b5 solid;
+        padding: 8px 10px;
+    }
+    #header .menu ul li:hover{
+        background:#f3f3f3
+    }
+    #login{width:96%!important;}
+    #logo{width:17%!important;}
+    #header input{width:65%!important;}
+    #content{
+        width:96%!important;
+    }
+    section{width:96%!important;margin-bottom:20px!important;}
+    #header .menu-mobile{    display: block!important;
+        right: 2px!important;
+        top: 0!important;
+        font-size: 1.4em;
+        float: right;
+        text-align: right;
+        padding: 3px 9px;}
+    #header input{
+        width:15%
+    }
+    #header #logo-login {
+        width:5%;
+        margin:3px 0 3px 1%;
+    }
+    #javisitei {
+        width: 96%!important;
+        left: 4%!important;
+        top:auto!important;
+        bottom: 100px!important;
+    }
+    #javisitei textarea{
+        width: 180px!important;
+    }
+    .container{margin-top: 100px!important;}
+    #header .autocomplete-items{left: 19%!important;width: 65%!important;}
+}
