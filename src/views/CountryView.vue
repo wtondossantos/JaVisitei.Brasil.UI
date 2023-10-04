@@ -31,16 +31,15 @@
 				<svg id="map" :width="innerWidth" :height="innerHeightNew" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" transform-origin="center">
 					<g class="map-g" id="mapg" :style="styleTransform">
 						<desc>Terra</desc>
-						<g v-for="country in earthFull?.$values" v-bind:key="country.$id" :id="country.id + '_g'">
-							<a v-for="state in country?.states?.$values" v-bind:key="state.$id" :id="state.id + '_a'" class="state" @click.prevent="onClickState" @mouseover="onMouseOverState" @mouseout="onMouseOutState" :title="state.name+'|'+country.name.split('|')[1]">
-                                <path aria-hidden="true" :id="state.id" :ref="state.id" :itemid="state.$id" :title="state.name +' - '+ country.name.split('|')[1]" :style="[state.visit?.color ? [{fill: state.visit.color}] : '']" stroke-width="0.2" class="shape" :d="state.canvas"></path>
-                                <div style="display:none" v-if="state.visit?.color">
-                                    <span class="color">{{state.visit.color}}</span>
-                                    <span class="date">{{state.visit.visitDate.substring(0,10)}}</span>
-                                    <span class="note">{{state.visit.note}}</span>
+						<g v-for="country in countries?.$values" v-bind:key="country.$id" :id="country.id + '_g'">
+                            <a :id="country.id + '_a'" class="country" @click.prevent="onClickCountry" @mouseover="onMouseOverCountry" @mouseout="onMouseOutCountry" :title="country.name">
+                                <path :id="country.id" :ref="country.id" stroke-width="0.75" :d="country.canvas" aria-hidden="true" :itemid="country.$id" :title="country.name" :style="[country.visit?.color ? [{fill: country.visit.color}] : '']" class="shape"></path>
+                                <div style="display:none" v-if="country.visit?.color">
+                                    <span class="color">{{country.visit.color}}</span>
+                                    <span class="date">{{country.visit.visitDate.substring(0,10)}}</span>
+                                    <span class="note">{{country.visit.note}}</span>
                                 </div>
                             </a>
-                            <path :id="country.id" stroke-width="0.5" :d="country.canvas"></path>
                         </g>
 					</g>
 					<g transform="translate(10,10)" class="map-navigation">
@@ -112,8 +111,8 @@
 		start = reactive({x: 0, y: 0});
 		var user = reactive(localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : {});
 	
-  	var namesStates = [];
-	namesStates = JSON.parse(localStorage.getItem('namesStates'));
+  	var namesCountries = [];
+	namesCountries = JSON.parse(localStorage.getItem('namesCountries'));
 
 	document.addEventListener('contextmenu', (e) => e.preventDefault());
 
@@ -151,7 +150,7 @@
 		setTransform(maxTransition);	
 	}
 	
-	function handleJaVisitei(active, regionDetail, eCity, nameCountry, posX, posY) {
+	function handleJaVisitei(active, regionDetail, eCity, posX, posY) {
 			
 		if(active){
 			addPathActive(eCity);
@@ -173,8 +172,8 @@
 			}
 			
 			javisitei.value.style = `display: block; left: ${posX}px; top: ${posY}px;border-color: ${color.value.value}`;
-			regionName.value.innerText = eCity.attributes.title.value;
-			countryName.value.innerText = nameCountry;
+			regionName.value.innerText = eCity.attributes.title.value.split('|')[1];
+			countryName.value.innerText = eCity.attributes.title.value.split('|')[0];
 			search.value = '';
 			
 		} else cleanJaVisitei();
@@ -249,13 +248,14 @@
 			this.parentNode.appendChild(a);
 			
 			for (i = 0; i < arr.length; i++) {
-				var nameFull = `${arr[i].name} - ${arr[i].name_country.split('|')[1]}`;
 
-				if (replaceSpecialChars(nameFull).includes(replaceSpecialChars(val))) {
+				if (replaceSpecialChars(arr[i].name).includes(replaceSpecialChars(val))) 
+                {
+                    let nameCountry = arr[i].name.split('|')[1];
 
 					b = document.createElement("DIV");
-					b.innerHTML = nameFull;
-					b.innerHTML += "<input type='hidden' value='" + nameFull + "' key='"+arr[i].id+"'>";
+					b.innerHTML = nameCountry;
+					b.innerHTML += "<input type='hidden' value='" + nameCountry + "' key='"+arr[i].id+"'>";
 					b.addEventListener("click", function(e) {
 						eInput = this.getElementsByTagName("input")[0];
 						inp.value = eInput.value;
@@ -263,7 +263,7 @@
 						eCityLink = document.getElementById(`${eInput.getAttribute('key')}_a`);
 						
 						removePathActive(eCity);
-						handleJaVisitei(true, eCityLink.getElementsByTagName('div'), eCity, eCityLink.getAttribute('title').split('|')[1], header.offsetLeft+header.offsetWidth/2-javisiteiWidth/2, inp.offsetTop+inp.offsetTop+10);
+						handleJaVisitei(true, eCityLink.getElementsByTagName('div'), eCity, header.offsetLeft+header.offsetWidth/2-javisiteiWidth/2, inp.offsetTop+inp.offsetTop+10);
 						closeAllLists();
 					});
 					a.appendChild(b);
@@ -344,31 +344,31 @@
 		return str.toUpperCase(); 
 	}
 	
-	async function getNamesStatesAPI(){
+	async function getNamesCountriesAPI(){
 		
-		if(namesStates != null){
-			autocomplete(search, namesStates);
+		if(namesCountries != null){
+			autocomplete(search, namesCountries);
 		}else{
-			await http.get('states/1/names')
+			await http.get('countries/1/names/mundifull')
 				.then(function (response) {
-					namesStates = response.data.$values;
+					namesCountries = response.data.$values;
           			Promise.resolve(response.data);
 				})
 				.catch((error) => {
   					if (error.response || error.response.status != 401) console.log(error);
 				})
 				.finally(function () {
-					localStorage.setItem('namesStates', JSON.stringify(namesStates));
-					autocomplete(search, namesStates);
+					localStorage.setItem('namesCountries', JSON.stringify(namesCountries));
+					autocomplete(search, namesCountries);
 				});
 		}
   	}
-
+    
 	async function pinarAPI(){
 		
 		let data = {
   				userId: user.id,
-  				regionTypeId: 2,
+  				regionTypeId: 1,
   				regionId: pathActive.value.id,
   				color: convertHexToRGB(color.value.value),
   				visitationDate: date.value.value,
@@ -412,7 +412,7 @@
 
 		await http.delete('visits', { data: {
 				userId: user.id,
-				regionTypeId: 2,
+				regionTypeId: 1,
 				regionId: pathActive.value.id
 			}})
 			.then((response) => {
@@ -423,11 +423,11 @@
 			});
 	}
 	
-	function getMapEarthFullAPI(map){
-		map.earthFull = null;
-		http.get(`countries/1/user/${user.id}/mundifull`)
+	function getMapCountriesFullAPI(map){
+		map.countries = null;
+		http.get(`countries/1/user/${user.id}/mundi`)
 			.then(response => {
-				map.earthFull = response.data;
+				map.countries = response.data;
 				Promise.resolve(response.data);
 			})
 			.catch(error => {
@@ -467,7 +467,7 @@
 			loggedIn() {
 				return this.$store.state.auth.status.loggedIn;
 			},
-			currentMapEarth(){
+			currentMapCountry(){
 				return true;
 			}
 		},
@@ -484,15 +484,15 @@
 			scale.value = innerHeightNew < innerWidth ? innerHeightNew/fileHeight : innerWidth/fileWidth;
 			scaleOriginal.value = scale.value;
 
-			getNamesStatesAPI();
+			getNamesCountriesAPI();
 			if(this.$store.state.auth.user)
 				user = this.$store.state.auth.user;
-			getMapEarthFullAPI(this);
+			getMapCountriesFullAPI(this);
 			handleHome();
 		},
 		methods: {
-			onMouseOverState($evt){
-				tooltip.value.innerText = $evt.target.attributes.title.value;
+			onMouseOverCountry($evt){
+				tooltip.value.innerText = `${$evt.target.attributes.title.value.split('|')[1]} - ${$evt.target.attributes.title.value.split('|')[0]}`;
 				tooltip.value.style = 'display:block';
 
 				let top = $evt.clientY - 80;
@@ -504,13 +504,13 @@
 				}
 				tooltip.value.style = style;
 			},
-			onMouseOutState(){
+			onMouseOutCountry(){
 				tooltip.value.style = 'display:none';
 			},
-			onClickState($evt){
+			onClickCountry($evt){
 				if(isClick.value){
 					removePathActive();
-					handleJaVisitei(true, $evt.target.parentElement.getElementsByTagName('div'), $evt.target, $evt.target.parentElement.attributes.title.value.split('|')[1], $evt.clientX, $evt.clientY);
+					handleJaVisitei(true, $evt.target.parentElement.getElementsByTagName('div'), $evt.target, $evt.clientX, $evt.clientY);
 				}
 			},
 			onClickHome(){
@@ -615,7 +615,7 @@
 				countryName,
 				date,
 				annotation,
-				earthFull: null,
+				countries: null,
       			loading: true,
 				errored: false
 			}
@@ -638,17 +638,17 @@
 			position:relative;
 		}
 		
-		#map .state {
+		#map .country {
 			cursor: pointer;
 			stroke-width:0.1;
 			position:relative;
 		}
 		
-		#map .state .shape {
+		#map .country .shape {
 			cursor: pointer;
 		}
 		
-		#map .state .lbl_state {
+		#map .country .lbl_country {
 			display: none;
 			font-family: Arial;
 			font-size: 14px;
@@ -657,26 +657,26 @@
 			position: absolute;
 		}
 		
-		#map .state:hover .lbl_state {
+		#map .country:hover .lbl_country {
 			display: block;
 			cursor: pointer;
 		}
 		
-		#map .map-g .state .shape {
+		#map .map-g .country .shape {
 			fill: #fff;
 		}
 		
-		#map .map-g .state .lbl_state {
+		#map .map-g .country .lbl_country {
 			fill: #666;
 			display: none;
 		}
 		
-		#map .map-g .state:hover .shape, #map .map-g .state.hover .shape {
+		#map .map-g .country:hover .shape, #map .map-g .country.hover .shape {
 			fill: rgba(0, 127, 255, 0.8) !important;
 			stroke-width: .2;
 		}
 		
-		#map .map-g .state .active{
+		#map .map-g .country .active{
 			fill: #2dffb2;
 		}
 

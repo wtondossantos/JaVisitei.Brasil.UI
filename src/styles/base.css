@@ -94,7 +94,7 @@
   body {
     display: flex;
     justify-content: center;
-    background-color: #fff;
+    background: #fff;
     height: 100%;
     width: 100%;
     padding: 16px;
