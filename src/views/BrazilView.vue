@@ -262,7 +262,7 @@
 			this.parentNode.appendChild(a);
 			
 			for (i = 0; i < arr.length; i++) {
-				if (replaceSpecialChars(arr[i].name.substr(0, val.length)) == replaceSpecialChars(val)) {
+				if (replaceSpecialChars(arr[i].name).includes(replaceSpecialChars(val))) {
 					let nameFull = `${arr[i].name} - ${arr[i].id.substr(0,2).toUpperCase()}`;
 					b = document.createElement("DIV");
 					b.innerHTML = nameFull;

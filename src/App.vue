@@ -55,6 +55,11 @@
               <font-awesome-icon icon="map-location-dot" /> Mundi
             </router-link>
 					</li>
+					<li id="menuCountry" v-if="currentUser">
+            <router-link :to="{name:'country'}">
+              <font-awesome-icon icon="map-location-dot" /> Países
+            </router-link>
+					</li>
           <li v-if="!currentUser">
             <router-link to="/register">
               <font-awesome-icon icon="user-plus" /> Criar conta
@@ -85,7 +90,7 @@
         </ul>
       </nav>
       <div class="search">
-        <input v-if="currentUser && (currentMapBrazil || currentMapEarth)" type="search" id="search" autocomplete="off" placeholder="Buscar região" title="Buscar name por nome">
+        <input v-if="currentUser && (currentMapBrazil || currentMapEarth || currentMapCountry)" type="search" id="search" autocomplete="off" placeholder="Buscar região" title="Buscar name por nome">
       </div>
 		</header>
     <div class="container">
@@ -113,6 +118,9 @@
       },
       currentMapEarth(){
         return this.$router.currentRoute.value.name === 'earth';
+      },
+      currentMapCountry(){
+        return this.$router.currentRoute.value.name === 'country';
       }
       // ,showAdminBoard() {
       //   if (this.currentUser && this.currentUser['roles']) {
