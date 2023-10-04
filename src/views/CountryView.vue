@@ -33,7 +33,7 @@
 						<desc>Terra</desc>
 						<g v-for="country in countries?.$values" v-bind:key="country.$id" :id="country.id + '_g'">
                             <a :id="country.id + '_a'" class="country" @click.prevent="onClickCountry" @mouseover="onMouseOverCountry" @mouseout="onMouseOutCountry" :title="country.name">
-                                <path :id="country.id" :ref="country.id" stroke-width="0.75" :d="country.canvas" aria-hidden="true" :itemid="country.$id" :title="country.name" :style="[country.visit?.color ? [{fill: country.visit.color}] : '']" class="shape"></path>
+                                <path :id="country.id" :ref="country.id" stroke-width="0.5" :d="country.canvas" aria-hidden="true" :itemid="country.$id" :title="country.name" :style="[country.visit?.color ? [{fill: country.visit.color}] : '']" class="shape"></path>
                                 <div style="display:none" v-if="country.visit?.color">
                                     <span class="color">{{country.visit.color}}</span>
                                     <span class="date">{{country.visit.visitDate.substring(0,10)}}</span>
@@ -673,7 +673,7 @@
 		
 		#map .map-g .country:hover .shape, #map .map-g .country.hover .shape {
 			fill: rgba(0, 127, 255, 0.8) !important;
-			stroke-width: .2;
+			stroke-width: .5;
 		}
 		
 		#map .map-g .country .active{
