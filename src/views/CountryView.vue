@@ -33,7 +33,7 @@
 						<desc>Terra</desc>
 						<g v-for="country in countries?.$values" v-bind:key="country.$id" :id="country.id + '_g'">
                             <a :id="country.id + '_a'" class="country" @click.prevent="onClickCountry" @mouseover="onMouseOverCountry" @mouseout="onMouseOutCountry" :title="country.name">
-                                <path :id="country.id" :ref="country.id" stroke-width="0.75" :d="country.canvas" aria-hidden="true" :itemid="country.$id" :title="country.name" :style="[country.visit?.color ? [{fill: country.visit.color}] : '']" class="shape"></path>
+                                <path :id="country.id" :ref="country.id" stroke-width="0.5" :d="country.canvas" aria-hidden="true" :itemid="country.$id" :title="country.name" :style="[country.visit?.color ? [{fill: country.visit.color}] : '']" class="shape"></path>
                                 <div style="display:none" v-if="country.visit?.color">
                                     <span class="color">{{country.visit.color}}</span>
                                     <span class="date">{{country.visit.visitDate.substring(0,10)}}</span>
@@ -63,10 +63,10 @@
 								<circle r="15.5" cx="0" cy="0" fill="#FFFFFF" stroke="#000000" fill-opacity="1" stroke-width="1" stroke-opacity="0.1" transform="translate(16,16)" id="zoomout" @click="onClickZoomOut"></circle>
 								<path cs="100,100" d="M-6.5,0.5 L7.5,0.5" fill="none" stroke-width="1" stroke-opacity="1" stroke="#000000" transform="translate(16,16)" opacity="1" style="pointer-events: none;"></path>
 							</g>
-							<!-- <g cursor="pointer" transform="translate(0,36)">
-								<circle fill="#FFFFFF" stroke="#000000"  r="15.5" cx="0" cy="36" fill-opacity="1" stroke-width="1" stroke-opacity="0.1" transform="translate(16,16)" id="invert" @click="onClickInvert" />
+							<g cursor="pointer" transform="translate(0,36)">
+								<circle fill="#FFFFFF" stroke="#000000"  r="15.5" cx="0" cy="36" fill-opacity="1" stroke-width="1" stroke-opacity="0.1" transform="translate(16,16)" id="invert" @click="onClickRotate" />
 								<path d="M-2.979,33.75h9.354 M-6.042,38.625h9.354" fill="none" stroke-width="1" stroke-opacity="1" stroke="#000000" transform="translate(16,16)" opacity="1" style="pointer-events: none;"/>
-							</g> -->
+							</g>
 						</g>
 						<g cursor="pointer">
 							<circle r="15.5" cx="0" cy="0" fill="#FFFFFF" stroke="#000000" fill-opacity="1" stroke-width="1" stroke-opacity="0.1" transform="translate(16,16)" @click="onClickHome"></circle>
@@ -105,12 +105,14 @@
 		annotation = ref(null),
 		date = ref(null),
 		scale = ref(0.21),
+		rotate = ref(0),
 		scaleOriginal = ref(0.21),
-		styleTransform = reactive({'transform': 'translate(0px, 0px) scale(0.21)', 'transition': '0s'}),
+		styleTransform = reactive({'transform': 'translate(0px, 0px) scale(0.21) rotate(0deg)', 'transition': '0s'}),
 		translate = reactive({x: 0, y: 0}),
 		start = reactive({x: 0, y: 0});
 		var user = reactive(localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : {});
 	
+    var timer;
   	var namesCountries = [];
 	namesCountries = JSON.parse(localStorage.getItem('namesCountries'));
 
@@ -128,6 +130,7 @@
 		scale.value = scaleOriginal.value;
 		translate.x = 0;
 		translate.y = 0;
+        rotate.value = 0;
 
 		setTransform(maxTransition);
 	}
@@ -197,7 +200,7 @@
 	}
 
 	function setTransform(transition){
-		styleTransform.transform = `translate(${translate.x}px, ${translate.y}px) scale(${scale.value})`;
+		styleTransform.transform = `translate(${translate.x}px, ${translate.y}px) scale(${scale.value}) rotate(${rotate.value}deg)`;
 		styleTransform.transition = `${transition}s`;
 	}
 
@@ -557,6 +560,10 @@
 				hexcolor.value.value = color.value.value;
 				themeJaVisitei(color.value.value);
 			},
+            onClickRotate(){
+                rotate.value++;
+                setTransform(0);
+            },
 			onWheelMain($evt){
 				let delta = ($evt.wheelDelta ? $evt.wheelDelta : -$evt.deltaY);
 				handleZoom(delta, $evt.clientX, $evt.clientY);
@@ -567,6 +574,7 @@
 				isPanning.value = true;
 			},
 			onMouseUpMain(){
+                clearTimeout(timer);
 				isPanning.value = false;
 			},
 			onMouseMoveMain($evt){
@@ -599,6 +607,8 @@
 		data(){
 			return{
 				scale,
+                rotate,
+                timer,
 				styleTransform,
 				scaleOriginal,
 				fileHeight,
@@ -673,7 +683,7 @@
 		
 		#map .map-g .country:hover .shape, #map .map-g .country.hover .shape {
 			fill: rgba(0, 127, 255, 0.8) !important;
-			stroke-width: .2;
+			stroke-width: .5;
 		}
 		
 		#map .map-g .country .active{
