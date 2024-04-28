@@ -5,9 +5,9 @@
       </div>
     <Form @submit="handleLogin" :validation-schema="schema" autocomplete="off">
         <h3>Login</h3>
-        <label for="email" style="display:none">Email</label>
-        <Field name="email" v-model="user.email" type="email" placeholder="E-mail" class="form-control" />
-        <ErrorMessage name="email" class="error-feedback" />
+        <label for="input" style="display:none">Email ou Usuário</label>
+        <Field name="input" v-model="user.input" type="text" placeholder="E-mail ou usuário" class="form-control" />
+        <ErrorMessage name="input" class="error-feedback" />
         <label for="password" aria-hidden="true" style="display:none">Password</label>
         <Field name="password" v-model="user.password" type="password" placeholder="Senha" class="form-control" />
         <ErrorMessage name="password" class="error-feedback" />
@@ -29,7 +29,7 @@
   import { Form, Field, ErrorMessage } from "vee-validate";
   import * as yup from "yup";
 
-  const user = reactive({email:'', password:''});
+  const user = reactive({input:'', password:''});
 
   export default {
     name: "Login",
@@ -40,7 +40,7 @@
     },
     data() {
       const schema = yup.object().shape({
-        email: yup.string().required("O e-mail é obrigatório!"),
+        input: yup.string().required("O e-mail ou username é obrigatório!"),
         password: yup.string().required("A senha é obrigatória!"),
       });
 
