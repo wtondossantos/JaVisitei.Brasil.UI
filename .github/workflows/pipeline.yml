@@ -35,4 +35,5 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ID }}
           aws-secret-access-key: ${{ secrets.AWS_KEY }}
-          run: aws s3 cp --recursive --region ${{ secrets.AWS_REGION }} dist s3://javisitei.com
+          aws-region: us-east-1
+          run: aws s3 cp --recursive --region us-east-1 dist s3://javisitei.com
