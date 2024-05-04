@@ -38,5 +38,4 @@ jobs:
           aws-region: us-east-1
 
       - name: Deploy application to Amazon S3
-        run: |
-          run: aws s3 cp --recursive --region us-east-1 dist s3://javisitei.com
+        run: aws s3 cp --recursive --region us-east-1 dist s3://javisitei.com
