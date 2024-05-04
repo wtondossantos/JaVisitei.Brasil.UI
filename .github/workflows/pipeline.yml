@@ -30,12 +30,10 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Deploy
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_KEY }}
-        run: |
-          aws s3 cp \
-            --recursive \
-            --region ap-northeast-2 \
-            dist s3://javisitei.com
+      - name: Deploying application to Amazon S3
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+          run: aws s3 cp --recursive --region ap-northeast-2 dist s3://javisitei.com
