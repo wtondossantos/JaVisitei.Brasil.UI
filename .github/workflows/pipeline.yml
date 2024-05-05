@@ -34,8 +34,8 @@ jobs:
         uses: jakejarvis/s3-sync-action@v0.5.1
         with:
           args: --acl public-read --delete
-          aws-access-key-id: ${{ secrets.AWS_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_KEY }}
+          INPUT_AWS-ACCESS-KEY-ID: ${{ secrets.AWS_ID }}
+          INPUT_AWS-SECRET-ACCESS-KEY: ${{ secrets.AWS_KEY }}
         env:
           AWS_S3_BUCKET: 'javisitei.com'
           AWS_REGION: 'us-east-1'
