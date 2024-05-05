@@ -25,8 +25,8 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v2
         with:
-          name: deploy-package.zip
-          path: ./artifacts/Release/
+          name: path artifact
+          path: dist
 
   deploy:
     name: Deploy  
@@ -49,8 +49,8 @@ jobs:
       - name: Download artifact  
         uses: actions/download-artifact@v2
         with:
-          name: deploy-package.zip
-          path: ./artifacts/Release/
+          name: path artifact
+          path: dist
 
       - name: Deploying application to Amazon S3
         uses: jakejarvis/s3-sync-action@master
@@ -61,6 +61,6 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_KEY }}
           AWS_REGION: us-east-1
-          SOURCE_DIR: ./artifacts/Release/dist
+          SOURCE_DIR: dist
 #        run: aws s3 sync s3://${{ secrets.AWS_BUCKET }} dist
         
