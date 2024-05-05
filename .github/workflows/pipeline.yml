@@ -10,6 +10,7 @@ on:
 
 jobs:
   build:
+    name: Build  
     runs-on: ubuntu-latest
     steps:
       - name: Checkout source code
@@ -45,4 +46,5 @@ jobs:
           aws-region: us-east-1
 
       - name: Deploying application to Amazon S3
-        run: aws s3 cp --recursive --region us-east-1 dist s3://${{ secrets.AWS_BUCKET }}
+        run: aws s3 sync s3://${{ secrets.AWS_BUCKET }} dist
+        
