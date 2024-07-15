@@ -56,7 +56,7 @@ export default {
     const schema = yup.object().shape({
         code: yup
             .string()
-            .max(10, "Código inválido.")
+            .max(12, "Código inválido.")
             .min(10, "Código inválido."),
         email: yup
             .string()
